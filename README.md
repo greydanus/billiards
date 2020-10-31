@@ -7,5 +7,5 @@ This is a simple billiards RL environment. It is written in pure NumPy. It runs 
 The goal of this environment is to study the planning abilities of RL agents. After all, billiards is a game where one simply must do some sort of planning in order to be successful.
 
 ## Getting started
-* Read over the [Quickstart notebook](./quickstart.ipnyb)
-* If you want to know how the code works, read the [Tutorial notebook](./tutorial.ipnyb)
+* Read over the [Quickstart notebook](https://github.com/greydanus/billiards/blob/main/quickstart.ipynb)
+* If you want to know how the code works, read the [Tutorial notebook](https://github.com/greydanus/billiards/blob/main/tutorial.ipynb)
