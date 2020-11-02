@@ -40,7 +40,7 @@ def make_dataset(args, **kwargs):
   xs, cs = [], [] # xs, which may be pixels, and cs, which are always coordinates, acts=actions
   for i in range(args.num_samples):
     x, c, a = make_trajectory(env, args)
-    # c = np.concatenate([c,a], axis=-1)
+    c = np.concatenate([c,a], axis=-1)
     if not args.use_pixels:
         x = c  # if making a cood dataset, include action info in observation
     xs.append(x) ; cs.append(c) ; env.reset()
