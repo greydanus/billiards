@@ -124,11 +124,11 @@ class Billiards:
                            self.make_1d, normalize_v=False, verbose=False)[-1]
     # state has shape [balls, xyvxvy]
     self.state = state
-    self.x, self.v = state[:2], state[2:]
+    self.x, self.v = state[:,:2], state[:,2:]
     
     done = (self.x[0,0] > 0.8) and (self.x[0,1] < 0.2) # ball 0 is in upper right corner
     reward = 1. if done else 0.
-    info = {'coords': state.flatten()}
+    info = {'position': self.x.flatten(), 'velocity': self.v}
     
     if self.use_pixels:
       masks = render_masks(state, r=self.r, side=3*self.side).transpose(1,2,0) # masks has shape [x,y,num_balls]
@@ -137,6 +137,6 @@ class Billiards:
       if done:
         obs[:1] = obs[-1:] = obs[:,:1] = obs[:,-1:] = 100  # border color changes when reward is received
     else:
-      obs = state.flatten()
+      obs = self.x.flatten()
     # obs has shape [x, y, rgb] if use_pixels, otherwise shape [balls * xyvxvy]
     return obs, reward, done, info
