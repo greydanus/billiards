@@ -66,7 +66,7 @@ def collide_balls(new_xs, vs, r, dt):
 
 def init_balls(r, num_balls=3, make_1d=False, normalize_v=False):
   x0 = np.random.rand(num_balls, 2) * (1-2*r) + r  # balls go anywhere in box
-  v0 = (.75 * np.random.randn(*x0.shape)).clip(-1.25, 1.25)
+  v0 = (.4 * np.random.randn(*x0.shape)).clip(-.6, .6)
   if make_1d:
     x0[:,0] = 0.5 ; v0[:,0] = 0  # center and set horizontal velocity to 0
   if normalize_v:
@@ -113,7 +113,7 @@ class Billiards:
     # state has shape [balls, xyvxvy]
     self.x, self.v = state[:,:2], state[:,2:]
 
-  def step(self, action=None, num_steps=5, tau=1.5):
+  def step(self, action=None, num_steps=5, tau=0.75):
     if action is None:
         action = np.zeros((2)) # force applied to second ball
     assert action.shape[0] == 2

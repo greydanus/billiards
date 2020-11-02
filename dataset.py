@@ -12,7 +12,7 @@ def get_args(as_dict=False):
                 'time_steps': 45,
                 'num_balls': 2,
                 'r': 1e-1,
-                'dt': 1e-2,
+                'dt': 2e-2,
                 'seed': 0,
                 'make_1d': False,
                 'verbose': True,
@@ -54,6 +54,9 @@ def make_dataset(args, **kwargs):
   if args.use_pixels:
     dataset['c'] = cs[:, :split_ix]
     dataset['c_test'] = cs[:, split_ix:]
+  else:
+    dataset['y'] = dataset['x'][...,:8]  # targets are same as inputs, except we drop the actions
+    dataset['y_test'] = dataset['x_test'][...,:8]
   return dataset
 
 # we'll cache the dataset so that it doesn't have to be rebuild every time
