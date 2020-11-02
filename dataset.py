@@ -22,31 +22,35 @@ def get_args(as_dict=False):
 
 
 def make_trajectory(env, args):
-  obs, coords = [], []
+  obs, coords, actions = [], [], []
+  next_action = None
   for i in range(args.time_steps):
-    action = np.random.rand((2))*4-2 if i==4 else None
-    o, r, d, info = env.step(action)
-    obs.append(o) ; coords.append(info['coords'])
-  return np.stack(obs), np.stack(coords)
+    o, r, d, info = env.step(next_action)
+    next_action = (np.random.rand((2))*3-1.5) if i==3 else np.zeros((2))
+    obs.append(o) ; coords.append(info['coords']) ; actions.append(next_action.copy())
+  return np.stack(obs), np.stack(coords), np.stack(actions)
 
 def make_dataset(args, **kwargs):
   if args.use_pixels and args.verbose:
-    print('When Sam profiled this code, it took 0.136 sec/trajectory.')
-    print('\t-> Expect it to take ~22.5 mins to generate 10k samples.')
+    print('When Sam profiled this code, it took 0.15 sec/trajectory.')
+    print('\t-> Expect it to take ~25 mins to generate 10k samples.')
     
   np.random.seed(args.seed)
   env = Billiards(args, use_pixels=args.use_pixels)
-  xs, cs = [], [] # xs, which may be pixels, and cs, which are always coordinates
+  xs, cs = [], [] # xs, which may be pixels, and cs, which are always coordinates, acts=actions
   for i in range(args.num_samples):
-    x, c = make_trajectory(env, args)
+    x, c, a = make_trajectory(env, args)
+    c = np.concatenate([c,a], axis=-1)
+    if not args.use_pixels:
+        x = c  # if making a cood dataset, include action info in observation
     xs.append(x) ; cs.append(c) ; env.reset()
     if args.verbose and (i+1)%10==0:
       print('\rdataset {:.3f}% built'.format((i+1)/args.num_samples * 100), end='', flush=True)
 
-  xs, cs = np.stack(xs), np.stack(cs)
+  xs, cs = [np.stack(v).swapaxes(0,1) for v in [xs, cs]]
   split_ix = int(args.num_samples*args.train_split) # train / test split
   dataset = {'x': xs[:, :split_ix], 'x_test': xs[:, split_ix:],
-                 'dt': args.dt, 'r': args.r, 'num_balls': args.num_balls}
+            'dt': args.dt, 'r': args.r, 'num_balls': args.num_balls}
   if args.use_pixels:
     dataset['c'] = cs[:, :split_ix]
     dataset['c_test'] = cs[:, split_ix:]

@@ -3,7 +3,7 @@
 
 import numpy as np
 from skimage.transform import resize
-from render import render_balls, project_to_rgb
+from render import render_masks, project_to_rgb
 
 ############# Basic Physics Simulation ############# 
 
@@ -113,26 +113,30 @@ class Billiards:
     # state has shape [balls, xyvxvy]
     self.x, self.v = state[:,:2], state[:,2:]
 
-  def step(self, action=None, num_steps=5, tau=2):
+  def step(self, action=None, num_steps=5, tau=1.5):
     if action is None:
         action = np.zeros((2)) # force applied to second ball
     assert action.shape[0] == 2
     action = action.clip(-tau, tau)  # maximum force that can be applied
-    self.state[1,2:] -= action  # given v' = a*t + v & F=ma, we set m=t=1 and get v' = F + v
+    self.state[1,2:] += action  # given v' = a*t + v & F=ma, we set m=t=1 and get v' = F + v
+    
     state = simulate_balls(self.r, self.dt, num_steps, self.num_balls, self.state,
                            self.make_1d, normalize_v=False, verbose=False)[-1]
     # state has shape [balls, xyvxvy]
     self.state = state
     self.x, self.v = state[:2], state[2:]
     
-    if self.use_pixels:
-      masks = render_balls(state, r=self.r, side=3*self.side).transpose(1,2,0) # masks has shape [x,y,num_balls]
-      obs = project_to_rgb(masks)
-      obs = resize(obs.astype(float), (self.side, self.side, 3)).astype(np.int16)
-    else:
-      obs = state.flatten()
-    # obs has shape [x, y] if pixels, otherwise shape [balls * xyvxvy]
     done = (self.x[0,0] > 0.8) and (self.x[0,1] < 0.2) # ball 0 is in upper right corner
     reward = 1. if done else 0.
     info = {'coords': state.flatten()}
+    
+    if self.use_pixels:
+      masks = render_masks(state, r=self.r, side=3*self.side).transpose(1,2,0) # masks has shape [x,y,num_balls]
+      obs = project_to_rgb(masks)
+      obs = resize(obs.astype(float), (self.side, self.side, 3)).astype(np.int16)
+      if done:
+        obs[:1] = obs[-1:] = obs[:,:1] = obs[:,-1:] = 100  # border color changes when reward is received
+    else:
+      obs = state.flatten()
+    # obs has shape [x, y, rgb] if use_pixels, otherwise shape [balls * xyvxvy]
     return obs, reward, done, info
