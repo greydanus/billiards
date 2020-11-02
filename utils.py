@@ -5,7 +5,7 @@ import pickle
 
 def states_to_xy(states):
   '''A helper function for render_masks'''
-  return states[...,:8].reshape(*states.shape[:-1],2,4)[...,:2]
+  return states[...,:4].reshape(*states.shape[:-1],2,2)
 
 class ObjectView(object):  # make a dictionary look like an object
   def __init__(self, d): self.__dict__ = d
