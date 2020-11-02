@@ -9,4 +9,5 @@
 *.tar
 *.zip
 *.pkl
+__temp__.mp4
 __pycache__
