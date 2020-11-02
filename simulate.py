@@ -3,7 +3,7 @@
 
 import numpy as np
 from skimage.transform import resize
-from render import render_masks, project_to_rgb
+from .render import render_masks, project_to_rgb
 
 ############# Basic Physics Simulation ############# 
 

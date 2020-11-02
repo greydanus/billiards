@@ -2,8 +2,8 @@
 # Sam Greydanus | 2020
 
 import numpy as np
-from utils import ObjectView, to_pickle, from_pickle
-from simulate import Billiards
+from .utils import ObjectView, to_pickle, from_pickle
+from .simulate import Billiards
 
 
 def get_args(as_dict=False):
