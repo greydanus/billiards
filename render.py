@@ -23,6 +23,7 @@ def render_masks(centers, r=.15, side=100, render_target=True):
     masks = np.concatenate([masks, target_mask], axis=1)
   return masks if has_time_dim else masks.squeeze(0)
 
+
 @contextlib.contextmanager
 def temp_seed(seed):
     state = np.random.get_state()
