@@ -10,4 +10,4 @@ The goal of this environment is to study the planning abilities of RL agents. Bi
 
 ## Getting started
 * Read over the [Quickstart notebook](https://github.com/greydanus/billiards/blob/main/quickstart.ipynb)
-* If you want to know how the code works, read the [Tutorial notebook](https://github.com/greydanus/billiards/blob/main/tutorial.ipynb)
+* If you want to know how the code works, read the [All_Code notebook](https://github.com/greydanus/billiards/blob/main/all_code.ipynb)
