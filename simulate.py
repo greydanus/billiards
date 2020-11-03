@@ -66,7 +66,7 @@ def collide_balls(new_xs, vs, r, dt):
 
 def init_balls(r, num_balls=3, make_1d=False, normalize_v=False):
   x0 = np.random.rand(num_balls, 2) * (1-2*r) + r  # balls go anywhere in box
-  v0 = (.4 * np.random.randn(*x0.shape)).clip(-.6, .6)
+  v0 = (.75 * np.random.randn(*x0.shape)).clip(-1.2, 1.2)
   if make_1d:
     x0[:,0] = 0.5 ; v0[:,0] = 0  # center and set horizontal velocity to 0
   if normalize_v:

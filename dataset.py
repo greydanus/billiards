@@ -12,7 +12,7 @@ def get_args(as_dict=False):
                 'time_steps': 45,
                 'num_balls': 2,
                 'r': 1e-1,
-                'dt': 2e-2,
+                'dt': 1e-2,
                 'seed': 0,
                 'make_1d': False,
                 'verbose': True,
