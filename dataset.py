@@ -6,7 +6,7 @@ from .utils import ObjectView, to_pickle, from_pickle
 from .simulate import Billiards
 
 
-def get_args(as_dict=False):
+def get_dataset_args(as_dict=False):
     arg_dict = {'num_samples': 10000,
                 'train_split': 0.9,
                 'time_steps': 45,
@@ -26,7 +26,7 @@ def make_trajectory(env, args):
   next_action = None
   for i in range(args.time_steps):
     o, r, d, info = env.step(next_action)
-    next_action = (np.random.rand((2))*3-1.5) if i==2 else np.zeros((2))
+    next_action = (np.random.rand((2))*2-1) if i==2 else np.zeros((2))
     obs.append(o) ; coords.append(info['position']) ; actions.append(next_action.copy())
   return np.stack(obs), np.stack(coords), np.stack(actions)
 

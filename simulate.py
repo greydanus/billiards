@@ -113,7 +113,7 @@ class Billiards:
     # state has shape [balls, xyvxvy]
     self.x, self.v = state[:,:2], state[:,2:]
 
-  def step(self, action=None, num_steps=5, tau=0.75):
+  def step(self, action=None, num_steps=5, tau=1):
     if action is None:
         action = np.zeros((2)) # force applied to second ball
     assert action.shape[0] == 2
