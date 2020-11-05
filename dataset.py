@@ -26,7 +26,8 @@ def make_trajectory(env, args):
   next_action = None
   for i in range(args.time_steps):
     o, r, d, info = env.step(next_action)
-    next_action = 1.2 * (2*np.random.rand((2))-1) if i==3 else np.zeros((2))
+    # next_action = 1.2 * (2*np.random.rand((2))-1) if i==3 else np.zeros((2))
+    next_action = 1.2 * (2*np.random.rand((2))-1) if np.random.rand() < 0.07 else np.zeros((2))
     obs.append(o) ; coords.append(info['position']) ; actions.append(next_action.copy())
   return np.stack(obs), np.stack(coords), np.stack(actions)
 
@@ -42,7 +43,7 @@ def make_dataset(args, **kwargs):
     x, c, a = make_trajectory(env, args)
     c = np.concatenate([c,a], axis=-1)
     if not args.use_pixels:
-        x = c  # if making a cood dataset, include action info in observation
+        x = c  # if making a coord dataset, include action info in observation
     xs.append(x) ; cs.append(c) ; env.reset()
     if args.verbose and (i+1)%10==0:
       print('\rdataset {:.3f}% built'.format((i+1)/args.num_samples * 100), end='', flush=True)
