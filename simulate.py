@@ -96,7 +96,7 @@ def simulate_balls(r=8e-2, dt=2e-2, num_steps=50, num_balls=2, init_state=None, 
 ############# RL Environment Wrapper ############# 
 
 class Billiards:
-  def __init__(self, args, use_pixels=False, action_is_force=False):
+  def __init__(self, args, use_pixels=False, action_is_force=True):
     assert not args.make_1d, "We only support 2D sims"
     self.make_1d = False
     self.r = args.r
@@ -110,11 +110,12 @@ class Billiards:
     self.reset()
     
   def reset(self):
-    self.state = state = init_balls(self.r, self.num_balls, self.make_1d, normalize_v=False)
-    # state has shape [balls, xyvxvy]
+    state = init_balls(self.r, self.num_balls, self.make_1d, normalize_v=False)
+    state[1,2:] = 0  # state has shape [balls, xyvxvy]
+    self.state = state
     self.x, self.v = state[:,:2], state[:,2:]
 
-  def step(self, action=None, num_steps=5, tau=1):
+  def step(self, action=None, num_steps=5, tau=1.2):
     if action is not None and action.sum() != 0:
         assert action.shape[0] == 2
         action = action.clip(-tau, tau) # maximum force that can be applied

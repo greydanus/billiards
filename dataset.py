@@ -26,7 +26,7 @@ def make_trajectory(env, args):
   next_action = None
   for i in range(args.time_steps):
     o, r, d, info = env.step(next_action)
-    next_action = (np.random.rand((2))*2.4-1.2) if i==3 else np.zeros((2))
+    next_action = 1.2 * (2*np.random.rand((2))-1) if i==3 else np.zeros((2))
     obs.append(o) ; coords.append(info['position']) ; actions.append(next_action.copy())
   return np.stack(obs), np.stack(coords), np.stack(actions)
 
