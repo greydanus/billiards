@@ -26,7 +26,7 @@ def make_trajectory(env, args):
   next_action = None
   for i in range(args.time_steps):
     o, r, d, info = env.step(next_action)
-    next_action = (np.random.rand((2))*2-1) if i==3 else np.zeros((2))
+    next_action = (np.random.rand((2))*2.4-1.2) if i==3 else np.zeros((2))
     obs.append(o) ; coords.append(info['position']) ; actions.append(next_action.copy())
   return np.stack(obs), np.stack(coords), np.stack(actions)
 
@@ -37,7 +37,7 @@ def make_dataset(args, **kwargs):
     
   np.random.seed(args.seed)
   env = Billiards(args, use_pixels=args.use_pixels)
-  xs, cs = [], [] # xs, which may be pixels, and cs, which are always coordinates, acts=actions
+  xs, cs = [], []  # xs, which may be pixels, and cs, which are always coordinates, acts=actions
   for i in range(args.num_samples):
     x, c, a = make_trajectory(env, args)
     c = np.concatenate([c,a], axis=-1)
