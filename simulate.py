@@ -110,8 +110,8 @@ class Billiards:
     self.reset()
     
   def reset(self):
-    state = init_balls(self.r, self.num_balls, self.make_1d, normalize_v=False)  # state has shape [balls, xyvxvy]
-    self.state = state
+    state = init_balls(self.r, self.num_balls, self.make_1d, normalize_v=False)
+    self.state = state  # state has shape [balls, xyvxvy]
     self.x, self.v = state[:,:2], state[:,2:]
 
   def step(self, action=None, num_steps=5, tau=1.2):

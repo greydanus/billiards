@@ -26,8 +26,7 @@ def make_trajectory(env, args):
   next_action = None
   for i in range(args.time_steps):
     o, r, d, info = env.step(next_action)
-    # next_action = 1.2 * (2*np.random.rand((2))-1) if i==3 else np.zeros((2))
-    next_action = 1.2 * (2*np.random.rand((2))-1) if np.random.rand() < 0.07 else np.zeros((2))
+    next_action = 1.2 * (2*np.random.rand((2))-1) if i==3 else np.zeros((2))
     obs.append(o) ; coords.append(info['position']) ; actions.append(next_action.copy())
   return np.stack(obs), np.stack(coords), np.stack(actions)
 
@@ -46,7 +45,7 @@ def make_dataset(args, **kwargs):
         x = c  # if making a coord dataset, include action info in observation
     xs.append(x) ; cs.append(c) ; env.reset()
     if args.verbose and (i+1)%10==0:
-      print('\rdataset {:.3f}% built'.format((i+1)/args.num_samples * 100), end='', flush=True)
+      print('\rdataset {:.2f}% built'.format((i+1)/args.num_samples * 100), end='', flush=True)
 
   xs, cs = [np.stack(v).swapaxes(0,1) for v in [xs, cs]]
   split_ix = int(args.num_samples*args.train_split) # train / test split
@@ -55,9 +54,6 @@ def make_dataset(args, **kwargs):
   if args.use_pixels:
     dataset['c'] = cs[:, :split_ix]
     dataset['c_test'] = cs[:, split_ix:]
-  else:
-    dataset['y'] = dataset['x'][...,:8]  # targets are same as inputs, except we drop the actions
-    dataset['y_test'] = dataset['x_test'][...,:8]
   return dataset
 
 # we'll cache the dataset so that it doesn't have to be rebuild every time
