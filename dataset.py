@@ -20,7 +20,6 @@ def get_dataset_args(as_dict=False):
                 'use_pixels': False}
     return arg_dict if as_dict else ObjectView(arg_dict)
 
-
 def make_trajectory(env, args):
   obs, coords, actions = [], [], []
   next_action = None
