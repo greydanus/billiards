@@ -112,7 +112,7 @@ class Billiards:
   def reset(self):
     state = init_balls(self.r, self.num_balls, self.make_1d, normalize_v=False)
     self.state = state  # state has shape [balls, xyvxvy]
-    if np.random.rand() < 0.1:
+    if np.random.rand() < 0.2:
       ball_ix = np.random.randint(2)
       self.state[ball_ix,2:] = 0
     self.x, self.v = state[:,:2], state[:,2:]
@@ -125,7 +125,7 @@ class Billiards:
             self.state[1,2:] += action  # given v' = a*t + v & F=ma, we set m=t=1 and get v' = F + v
         else:
             self.state[1,2:] = action   # treat the action as the new velocity directly
-        # self.state[1,2:] = self.state[1,2:].clip(-tau, tau) # maximum velocity
+        self.state[1,2:] = self.state[1,2:].clip(-1.5*tau, 1.5*tau) # maximum velocity
     
     state = simulate_balls(self.r, self.dt, num_steps, self.num_balls, self.state,
                            self.make_1d, normalize_v=False, verbose=False)[-1]
