@@ -114,7 +114,7 @@ class Billiards:
     self.state = state  # state has shape [balls, xyvxvy]
     if np.random.rand() < 0.2:
       ball_ix = np.random.randint(2)
-      self.state[ball_ix,2:] = 0
+      self.state[:,2:] = 0  # set the balls' velocities to 0
     self.x, self.v = state[:,:2], state[:,2:]
 
   def step(self, action=None, num_steps=5, tau=1.2):
